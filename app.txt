@@ -1,0 +1,29 @@
+import streamlit as st
+import pandas as pd
+import io
+import zipfile
+import json
+from datetime import datetime
+
+# --- Инициализация состояния сеанса ---
+if 'data' not in st.session_state:
+    st.session_state.data = {
+        'tasks': pd.DataFrame(),
+        'meetings': pd.DataFrame(),
+        'projects': pd.DataFrame(),
+        'employees': pd.DataFrame(),
+        'materials': []  # Список словарей: {'name': str, 'project': str, 'content': bytes}
+    }
+
+CONTROL_DATE = datetime(2026, 11, 9)
+
+# --- Навигация ---
+st.set_page_config(page_title="Рабочий кабинет", layout="wide")
+menu = st.sidebar.radio("Разделы", ["Задачи", "Календарь", "Материалы", "Обзор", "Отчёты", "Резервная копия"])
+
+st.sidebar.markdown("---")
+st.sidebar.info("⚠️ Перед выходом скачайте резервную копию. При следующем посещении загрузите её. Автосохранения между посещениями нет.")
+
+# --- Раздел: Задачи ---
+if menu == "Задачи":
+    st.header("Управление задачами
